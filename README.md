@@ -13,7 +13,7 @@ The architecture is organized around a role-specialized operating point rather t
 Before training, PF-OS builds inputs that reflect the different reliability and time scales of the modalities. The model-facing data pipeline keeps the eye sequence as the main temporal stream and forms a compact static vector from ocular and cardiovascular descriptors. Raw derivative-based PPG sequences are preserved only for controlled ablations, while frequency-domain HRV features are used only when the available inter-beat interval segment is long enough to support them.
 
 <p align="center">
-  <img src="figures/tu2.png" alt="PF-OS preprocessing and feature construction pipeline" width="720">
+  <img src="figures/tu2.png" alt="PF-OS preprocessing and feature construction pipeline" width="580">
 </p>
 
 ## Environment
@@ -102,5 +102,3 @@ PF-OS/
   signal_visualizations/         Signal visualization script and example figures
   baseline_common.py             Shared static-feature baseline utilities
 ```
-
-Generated data, caches, checkpoints, fold-level predictions, and training runs are excluded from Git. No raw dataset, participant-level cache, trained checkpoint, or full prediction dump is committed to this repository.
