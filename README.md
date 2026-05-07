@@ -1,34 +1,20 @@
 # PF-OS
 
-Official code implementation and supplementary material for **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays**. This work proposes an ocular-dominant workload sensing framework for adaptive VR displays. PF-OS uses eye-tracking as the primary short-window temporal evidence and incorporates photoplethysmography/heart-rate-variability information as conservative static context.
+Official code implementation and supplementary material for **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays**.
 
-The reported operating point is a dual-expert consensus model: a primary ocular-static expert and a matched eye-only expert. The framework is designed for 10-second cognitive workload decoding under subject-wise evaluation.
+Short-window cognitive workload sensing in virtual reality is difficult because ocular and cardiovascular signals do not behave like equal partners. Eye-tracking features can respond quickly to task demand, while photoplethysmography (PPG) and heart-rate-variability cues evolve more slowly and are more vulnerable to motion or contact artifacts. PF-OS addresses this mismatch with an ocular-dominant, dual-expert Transformer design: eye sequences carry the main temporal evidence, physiological signals enter as robust static context, and a matched eye-only expert supplies complementary decision-level evidence.
 
-![PF-OS dual-expert architecture](figures/tu1.png)
+<p align="center">
+  <img src="figures/tu1.png" alt="PF-OS dual-expert architecture" width="720">
+</p>
 
-**Dual-expert architecture.** The framework consists of a primary ocular-static expert and a matched eye-only expert. The ocular-static expert extracts temporal representations from the eye-tracking sequence using a shared Transformer encoder and integrates engineered static features derived from eye-tracking and photoplethysmography/heart-rate-variability signals via feature-level concatenation. The eye-only expert adopts the same eye-sequence backbone without the static branch. Final prediction is obtained through decision-level weighted consensus of the two expert outputs, with the reported operating point using `lambda_1 = lambda_2 = 0.5`. Optional ablation-only modules, such as raw-PPG temporal modeling and cross-modal interaction blocks, are not part of the main operating path.
+The architecture is organized around a role-specialized operating point rather than generic symmetric multimodal fusion. The ocular-static expert uses a shared Transformer backbone to encode the eye sequence, then combines that representation with engineered eye and PPG/HRV summaries. A parallel eye-only expert keeps the same temporal backbone while removing the static branch. Their predicted probabilities are averaged with a fixed consensus weight in the reported PF-OS setting, making the final decision simple, interpretable, and easy to deploy in adaptive VR display pipelines.
 
-![PF-OS preprocessing and feature construction](figures/tu2.png)
+Before training, PF-OS builds inputs that reflect the different reliability and time scales of the modalities. The model-facing data pipeline keeps the eye sequence as the main temporal stream and forms a compact static vector from ocular and cardiovascular descriptors. Raw derivative-based PPG sequences are preserved only for controlled ablations, while frequency-domain HRV features are used only when the available inter-beat interval segment is long enough to support them.
 
-**Preprocessing and feature construction.** PF-OS uses the eye temporal sequence and the engineered static vector; the derivative-based raw PPG sequence is retained only for ablation. Frequency-domain HRV terms are computed only when at least 30 s of usable inter-beat intervals are available.
-
-## Results
-
-PF-OS is evaluated on the HP Omnicept Cognitive Load Dataset using subject-wise 5-fold cross-validation on 98 participants.
-
-| Family | Method | Acc. (%) | Macro-F1 (%) | AUC (%) |
-| --- | --- | ---: | ---: | ---: |
-| Shallow | KNN | 53.80 +/- 2.04 | 52.21 +/- 2.25 | 73.66 +/- 1.60 |
-| Shallow | Gaussian NB | 57.65 +/- 1.90 | 51.56 +/- 2.22 | 78.20 +/- 1.69 |
-| Shallow | LDA | 63.09 +/- 1.99 | 59.06 +/- 2.40 | 83.07 +/- 1.39 |
-| Shallow | SVM | 61.96 +/- 2.01 | 58.52 +/- 2.37 | 82.37 +/- 1.35 |
-| Shallow | Logistic regression | 64.17 +/- 2.02 | 60.47 +/- 2.38 | 83.25 +/- 1.46 |
-| Shallow | Random forest | 64.31 +/- 2.02 | 61.72 +/- 2.34 | 82.96 +/- 1.31 |
-| Deep | TFN | 61.59 +/- 2.33 | 59.14 +/- 2.54 | 81.15 +/- 1.64 |
-| Deep | MLP | 64.61 +/- 2.31 | 61.33 +/- 2.70 | 83.66 +/- 1.73 |
-| Deep | CNN | 70.79 +/- 2.63 | 68.74 +/- 2.93 | 88.23 +/- 1.74 |
-| Deep | LSTM | 71.78 +/- 2.72 | 69.50 +/- 3.08 | 88.66 +/- 1.64 |
-| Ours | PF-OS | **72.66 +/- 2.40** | **70.90 +/- 2.67** | **88.41 +/- 1.60** |
+<p align="center">
+  <img src="figures/tu2.png" alt="PF-OS preprocessing and feature construction pipeline" width="720">
+</p>
 
 ## Environment
 
@@ -118,7 +104,3 @@ PF-OS/
 ```
 
 Generated data, caches, checkpoints, fold-level predictions, and training runs are excluded from Git. No raw dataset, participant-level cache, trained checkpoint, or full prediction dump is committed to this repository.
-
-## Notes
-
-All reported confidence intervals and paired tests are computed at subject level, not window level, to avoid over-counting correlated windows from the same participant.
