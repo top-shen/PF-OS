@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Raw data and prepared caches
+HPO-CLD/
+HPO-CLD*/
+data/
+datasets/
+prepared_data/
+cache_mm/
+
+# Training outputs and checkpoints
+runs/
+*/runs/
+**/folds/
+**/quick_compare*/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npz
+
+# Large or privacy-sensitive generated evaluation artifacts
+**/predictions_test.csv
+**/per_subject_metrics.csv
+**/per_subject_all.csv
+**/train_loss_history.json
+**/run_config.json
+**/test_metrics.json
+
+# Keep only compact public result summaries from comparison/results.
+comparison/results/**
+!comparison/results/
+!comparison/results/comparison_suite.csv
+!comparison/results/ablation_consensus_summary.json
+
+# Paper build artifacts
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+report/figs/
+PF-OS/report/figs/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Stray local manuscript/reference image not used by the codebase
+Logistic Regression/1d5961d6116217e245ca6ab7b8239e96.jpg

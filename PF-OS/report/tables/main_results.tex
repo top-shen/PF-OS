@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Comparison of PhysioFormer-OS against the uniformly re-evaluated baseline suite on HPO-CLD. All methods use the same 98-subject filtered cohort and subject-wise 5-fold CV. PhysioFormer-OS is reported with subject-level 95\% bootstrap confidence intervals.}
+\label{tab:main_results}
+\begin{tabular}{lcccc}
+\toprule
+Method & Accuracy & Macro-F1 & AUC (OvR) & Type \\
+\midrule
+KNN & 0.526 & 0.510 & 0.713 & Classical ML \\
+Gaussian NB & 0.577 & 0.516 & 0.781 & Classical ML \\
+LDA & 0.629 & 0.589 & 0.831 & Classical ML \\
+SVM & 0.619 & 0.581 & 0.826 & Classical ML \\
+Logistic Regression & 0.640 & 0.603 & 0.832 & Classical ML \\
+Random Forest & 0.643 & 0.620 & 0.823 & Classical ML \\
+TFN & 0.623 & 0.597 & 0.812 & Deep Learning \\
+MLP & 0.632 & 0.604 & 0.818 & Deep Learning \\
+CNN & 0.699 & 0.670 & 0.881 & Deep Learning \\
+LSTM & 0.684 & 0.653 & 0.869 & Deep Learning \\
+\textbf{PhysioFormer-OS} & \textbf{0.713} & \textbf{0.698} & \textbf{0.873} & Deep Learning \\
+(Ours) & [0.691, 0.736] & [0.673, 0.723] & [0.856, 0.888] & \\
+\bottomrule
+\end{tabular}
+\end{table}

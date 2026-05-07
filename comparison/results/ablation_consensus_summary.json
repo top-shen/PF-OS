@@ -1,0 +1,36 @@
+{
+  "variants": [
+    {
+      "id": "consensus",
+      "name": "PhysioFormer-OS",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\fair_suite\\PhysioFormer-OS\\per_subject_all.csv"
+    },
+    {
+      "id": "eye_plus_static",
+      "name": "Static expert only",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\ablation_fixed\\eye_plus_static\\per_subject_all.csv"
+    },
+    {
+      "id": "raw_seq_multimodal",
+      "name": "PhysioFormer-S",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\ablation_fixed\\raw_seq_multimodal\\per_subject_all.csv"
+    },
+    {
+      "id": "no_cross",
+      "name": "w/o cross-attn",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\ablation_fixed\\no_cross\\per_subject_all.csv"
+    },
+    {
+      "id": "early_fusion",
+      "name": "Early fusion",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\ablation_fixed\\early_fusion\\per_subject_all.csv"
+    },
+    {
+      "id": "eye_only",
+      "name": "Eye only",
+      "csv": "D:\\liu\\shaokang\\2-1\\comparison\\results\\ablation_fixed\\eye_only\\per_subject_all.csv"
+    }
+  ],
+  "table_ablation": "D:\\liu\\shaokang\\2-1\\report\\tables\\ablation.tex",
+  "table_stats": "D:\\liu\\shaokang\\2-1\\report\\tables\\stats_tests.tex"
+}
