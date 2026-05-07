@@ -118,7 +118,7 @@ def train_tfn(X_train: np.ndarray, y_train: np.ndarray,
     import torch.nn as nn
     from torch.utils.data import DataLoader, TensorDataset
 
-    sys.path.insert(0, str(_PROJECT_ROOT / "TFN"))
+    sys.path.insert(0, str(_PROJECT_ROOT / "baselines" / "TFN"))
     from net import ModelConfig, HybridFusionNet
 
     if device_str == "auto":

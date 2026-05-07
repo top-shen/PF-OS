@@ -31,7 +31,7 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
 # Import preprocessing from PF-OS/data.py
-_OURS_DIR = Path(__file__).resolve().parent.parent / "PF-OS"
+_OURS_DIR = Path(__file__).resolve().parents[2] / "PF-OS"
 if str(_OURS_DIR) not in sys.path:
     sys.path.insert(0, str(_OURS_DIR))
 

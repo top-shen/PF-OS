@@ -91,14 +91,16 @@ python PF-OS/run_ablation.py --root HPO-CLD --k_folds 5 --ablation_outdir runs/a
 ```text
 PF-OS/
   PF-OS/                         Main PF-OS model, training, CV, ablation, and analysis scripts
-  comparison/                    Unified baseline and fair-comparison runners
-  KNN/, LDA/, SVM/, ...          Baseline entry points
-  PhysioFormer-S/                Raw-sequence multimodal ablation wrapper
-  Early Fusion Transformer/      Early-fusion ablation wrapper
-  Eye Only Transformer/          Eye-only ablation wrapper
-  No Cross Attention/            No-cross-attention ablation wrapper
-  TFN/                           Tensor Fusion Network baseline
+  baselines/                     Baseline model implementations and shared baseline utilities
+    KNN/, LDA/, SVM/, ...        Classical machine-learning baselines
+    CNN/, MLP/, LSTM/, TFN/      Deep-learning baselines
+    baseline_common.py           Shared static-feature extraction and evaluation helpers
+  ablations/                     Paper ablation wrappers
+    PhysioFormer-S/              Raw-sequence multimodal variant
+    Early Fusion Transformer/    Early-fusion variant
+    Eye Only Transformer/        Eye-only variant
+    No Cross Attention/          No-cross-attention variant
+  comparison/                    Unified fair-comparison runners and result collectors
   figures/                       Selected paper figures used by this README
   signal_visualizations/         Signal visualization script and example figures
-  baseline_common.py             Shared static-feature baseline utilities
 ```

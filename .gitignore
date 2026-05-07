@@ -68,7 +68,7 @@ desktop.ini
 .vscode/
 
 # Stray local manuscript/reference image not used by the codebase
-Logistic Regression/1d5961d6116217e245ca6ab7b8239e96.jpg
+baselines/Logistic Regression/1d5961d6116217e245ca6ab7b8239e96.jpg
 
 # Local paper figure exports; explicitly add selected figures used by README.
 figures/*

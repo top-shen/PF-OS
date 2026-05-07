@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Recovered wrapper for the raw-sequence multimodal PhysioFormer-S profile.
+Recovered wrapper for the naive early-fusion transformer baseline.
 """
 
 from __future__ import annotations
@@ -11,17 +11,19 @@ from pathlib import Path
 
 
 def main() -> None:
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parents[2]
     cmd = [
         sys.executable,
         str(root / "PF-OS" / "run_cv.py"),
         "--root",
         "HPO-CLD",
         "--cv_outdir",
-        "runs/revision_cv_cross_attn_clean",
+        "runs/revision_cv_early_fusion",
         "--cv_profile",
         "full",
         "--no_static",
+        "--no_cross_attn",
+        "--no_bilinear",
     ]
     raise SystemExit(subprocess.call(cmd, cwd=root))
 

@@ -59,7 +59,7 @@ def _load_module(module_name: str, file_path: Path):
     return module
 
 
-_tfn_net = _load_module("tfn_net_runtime", _PROJECT_ROOT / "TFN" / "net.py")
+_tfn_net = _load_module("tfn_net_runtime", _PROJECT_ROOT / "baselines" / "TFN" / "net.py")
 TFNModelConfig = _tfn_net.ModelConfig
 HybridFusionNet = _tfn_net.HybridFusionNet
 

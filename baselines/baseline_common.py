@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 # Add PF-OS/ to path for imports
-_OURS_DIR = Path(__file__).resolve().parent / "PF-OS"
+_OURS_DIR = Path(__file__).resolve().parent.parent / "PF-OS"
 if str(_OURS_DIR) not in sys.path:
     sys.path.insert(0, str(_OURS_DIR))
 
