@@ -1,15 +1,20 @@
-# PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays
+# PF-OS
 
-This repository contains the code used for the paper **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays**. The project studies short-window cognitive workload decoding in VR from eye-tracking and PPG signals, and argues that 10-second VR workload sensing should be treated as an ocular-dominant expert-allocation problem rather than symmetric raw multimodal fusion.
+Official code implementation and supplementary material for **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays**. This work proposes an ocular-dominant workload sensing framework for adaptive VR displays. PF-OS uses eye-tracking as the primary short-window temporal evidence and incorporates photoplethysmography/heart-rate-variability information as conservative static context.
 
-PF-OS, short for PhysioFormer-Ocular-Static, uses a dual-expert design:
+The reported operating point is a dual-expert consensus model: a primary ocular-static expert and a matched eye-only expert. The framework is designed for 10-second cognitive workload decoding under subject-wise evaluation.
 
-- an ocular-static expert, where eye-tracking sequences provide the main temporal evidence and PPG/HRV enters through robust static summaries;
-- a matched eye-only expert, combined at decision level with a fixed consensus rule.
+![PF-OS dual-expert architecture](figures/tu1.png)
 
-The manuscript evaluates PF-OS on the HP Omnicept Cognitive Load Dataset with subject-wise 5-fold cross-validation over 98 participants.
+**Dual-expert architecture.** The framework consists of a primary ocular-static expert and a matched eye-only expert. The ocular-static expert extracts temporal representations from the eye-tracking sequence using a shared Transformer encoder and integrates engineered static features derived from eye-tracking and photoplethysmography/heart-rate-variability signals via feature-level concatenation. The eye-only expert adopts the same eye-sequence backbone without the static branch. Final prediction is obtained through decision-level weighted consensus of the two expert outputs, with the reported operating point using `lambda_1 = lambda_2 = 0.5`. Optional ablation-only modules, such as raw-PPG temporal modeling and cross-modal interaction blocks, are not part of the main operating path.
 
-## Main Results
+![PF-OS preprocessing and feature construction](figures/tu2.png)
+
+**Preprocessing and feature construction.** PF-OS uses the eye temporal sequence and the engineered static vector; the derivative-based raw PPG sequence is retained only for ablation. Frequency-domain HRV terms are computed only when at least 30 s of usable inter-beat intervals are available.
+
+## Results
+
+PF-OS is evaluated on the HP Omnicept Cognitive Load Dataset using subject-wise 5-fold cross-validation on 98 participants.
 
 | Family | Method | Acc. (%) | Macro-F1 (%) | AUC (%) |
 | --- | --- | ---: | ---: | ---: |
@@ -25,39 +30,31 @@ The manuscript evaluates PF-OS on the HP Omnicept Cognitive Load Dataset with su
 | Deep | LSTM | 71.78 +/- 2.72 | 69.50 +/- 3.08 | 88.66 +/- 1.64 |
 | Ours | PF-OS | **72.66 +/- 2.40** | **70.90 +/- 2.67** | **88.41 +/- 1.60** |
 
-## Ablation Results
+## Environment
 
-| Variant | Acc. (%) | Macro-F1 (%) | AUC (%) | Delta Macro-F1 vs PF-OS (pp) | Adj. p | Cohen's d |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| PF-OS | **72.66 +/- 2.40** | **70.90 +/- 2.67** | **88.41 +/- 1.60** | - | - | - |
-| Static expert only | 70.54 +/- 2.29 | 68.74 +/- 2.62 | 86.67 +/- 1.56 | -2.15 | 9.52e-04 | 0.39 |
-| PF-S | 70.73 +/- 2.17 | 68.74 +/- 2.47 | 86.27 +/- 1.65 | -2.16 | 3.17e-02 | 0.27 |
-| w/o cross-attention | 69.77 +/- 2.35 | 67.40 +/- 2.70 | 86.20 +/- 1.71 | -3.50 | 1.51e-03 | 0.38 |
-| Early fusion | 69.57 +/- 2.33 | 67.31 +/- 2.68 | 85.49 +/- 1.72 | -3.59 | 2.78e-03 | 0.37 |
-| Eye only | 71.76 +/- 2.19 | 70.13 +/- 2.39 | 87.70 +/- 1.70 | -0.77 | 0.239 | 0.12 |
-
-## Repository Layout
+The code was organized for Python 3.8. Core dependencies are:
 
 ```text
-PF-OS/
-  PF-OS/                         Main model, training, CV, ablation, and analysis scripts
-  comparison/                    Unified baseline and fair-comparison runners
-  KNN/, LDA/, SVM/, ...          Recovered baseline entry points
-  PhysioFormer-S/                Raw-sequence multimodal ablation wrapper
-  Early Fusion Transformer/      Early-fusion ablation wrapper
-  Eye Only Transformer/          Eye-only ablation wrapper
-  No Cross Attention/            No-cross-attention ablation wrapper
-  TFN/                           Tensor Fusion Network baseline
-  signal_visualizations/         Signal visualization script and example figures
-  report/tables/                 Small generated paper tables retained for reference
-  baseline_common.py             Shared static-feature baseline utilities
+torch>=1.10
+numpy>=1.23
+pandas>=1.5
+scipy>=1.9
+scikit-learn>=1.1
+tqdm>=4.64
+matplotlib>=3.5
 ```
 
-Generated data, caches, checkpoints, fold-level predictions, and training runs are intentionally excluded from Git by `.gitignore`.
+Install dependencies with:
 
-## Data
+```bash
+pip install -r requirements.txt
+```
 
-The raw HP Omnicept Cognitive Load Dataset is not included in this repository. Place the dataset under `HPO-CLD/` using this structure:
+Install the PyTorch build that matches your CUDA/CPU environment before running full experiments.
+
+## Dataset and Preprocessing
+
+The raw HP Omnicept Cognitive Load Dataset is not included in this repository. Place the dataset under `HPO-CLD/` using the following structure:
 
 ```text
 HPO-CLD/
@@ -69,36 +66,31 @@ HPO-CLD/
   ...
 ```
 
-Timestamps are expected in Unix microseconds. The default windowing protocol is 10 seconds with a 5-second stride.
+Timestamps are expected in Unix microseconds. The default windowing protocol is 10 s windows with a 5 s stride.
 
-## Environment
-
-Install Python dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Install the PyTorch build that matches your machine first if you need CUDA support.
-
-## Reproduction
-
-Run a dataset integrity check:
+To run a dataset integrity check:
 
 ```bash
 python PF-OS/check_data.py --root HPO-CLD --log runs/data_check.log --window_sec 10 --stride_sec 5
 ```
 
-Run PF-OS subject-wise 5-fold CV:
+For static-feature baselines, preprocess the dataset once:
+
+```bash
+python comparison/prepare_data.py --root HPO-CLD --outdir prepared_data
+```
+
+## Running the Code
+
+Run PF-OS subject-wise 5-fold cross-validation:
 
 ```bash
 python PF-OS/run_cv.py --root HPO-CLD --k_folds 5 --cv_outdir runs/cv_pf_os --cv_profile consensus --amp
 ```
 
-Run the fair baseline suite:
+Run the fair comparison suite:
 
 ```bash
-python comparison/prepare_data.py --root HPO-CLD --outdir prepared_data
 python comparison/run_fair_suite.py --root HPO-CLD --data_dir prepared_data --outdir comparison/results/fair_suite
 ```
 
@@ -108,8 +100,25 @@ Run controlled ablations:
 python PF-OS/run_ablation.py --root HPO-CLD --k_folds 5 --ablation_outdir runs/ablation_pf_os --amp
 ```
 
+## Repository Layout
+
+```text
+PF-OS/
+  PF-OS/                         Main PF-OS model, training, CV, ablation, and analysis scripts
+  comparison/                    Unified baseline and fair-comparison runners
+  KNN/, LDA/, SVM/, ...          Baseline entry points
+  PhysioFormer-S/                Raw-sequence multimodal ablation wrapper
+  Early Fusion Transformer/      Early-fusion ablation wrapper
+  Eye Only Transformer/          Eye-only ablation wrapper
+  No Cross Attention/            No-cross-attention ablation wrapper
+  TFN/                           Tensor Fusion Network baseline
+  figures/                       Selected paper figures used by this README
+  signal_visualizations/         Signal visualization script and example figures
+  baseline_common.py             Shared static-feature baseline utilities
+```
+
+Generated data, caches, checkpoints, fold-level predictions, and training runs are excluded from Git. No raw dataset, participant-level cache, trained checkpoint, or full prediction dump is committed to this repository.
+
 ## Notes
 
 All reported confidence intervals and paired tests are computed at subject level, not window level, to avoid over-counting correlated windows from the same participant.
-
-No raw dataset, participant-level cache, trained checkpoint, or full prediction dump is committed to this repository.
