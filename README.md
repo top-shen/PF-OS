@@ -1,6 +1,6 @@
 # PF-OS
 
-Official code implementation and supplementary material for **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays**(Accepted by IEEE OJCS)**.
+Official code implementation and supplementary material for **PF-OS: Ocular-Dominant Workload Sensing for Adaptive Virtual Reality Displays(Accepted by IEEE OJCS)**.
 
 Short-window cognitive workload sensing in virtual reality is difficult because ocular and cardiovascular signals do not behave like equal partners. Eye-tracking features can respond quickly to task demand, while photoplethysmography (PPG) and heart-rate-variability cues evolve more slowly and are more vulnerable to motion or contact artifacts. PF-OS addresses this mismatch with an ocular-dominant, dual-expert Transformer design: eye sequences carry the main temporal evidence, physiological signals enter as robust static context, and a matched eye-only expert supplies complementary decision-level evidence.
 
